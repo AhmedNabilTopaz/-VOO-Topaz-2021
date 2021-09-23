@@ -6,12 +6,12 @@
     >  
         
          <xpath expr="//table[1]/thead/tr//th[2]" position="before">
-            <th class="text-left">
+            <th class="text-center">
                 <strong>UOM</strong>
             </th>
         </xpath>
-       <xpath expr="//td[span[@t-field='line.name']]" position="before">
-            <td class="text-right">
+       <xpath expr="//td[span[@t-field='line.name']]" position="after">
+            <td class="text-center">
                 <span t-field="line.product_uom.name" />
             </td>
         </xpath>
