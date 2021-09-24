@@ -25,7 +25,10 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
    
-    
+    # Topaz modification 2021
+    Barcode_topaz = fields.One2many('product.product.barcode', related='order_line.product_id' , string='Barcodez')
+
+
 
     # adding discount to depends
     @api.depends("discount")
