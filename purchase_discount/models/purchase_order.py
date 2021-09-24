@@ -27,6 +27,7 @@ class PurchaseOrderLine(models.Model):
    
     # Topaz modification 2021
     barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
+    @api.depends("product_id")
     def _compute_order_barcode(self):
         if self.product_id:
             self.barcodez = product.product.barcode 
