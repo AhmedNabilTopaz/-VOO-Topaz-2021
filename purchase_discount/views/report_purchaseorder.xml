@@ -15,6 +15,21 @@
                 <span t-field="line.product_uom.name" />
             </td>
         </xpath>
+        
+          
+         <xpath expr="//table[1]/thead/tr//th[2]" position="before">
+            <th class="text-center">
+                <strong>Barcode</strong>
+            </th>
+        </xpath>
+          <xpath expr="//td[span[@t-field='line.product_uom.name']]" position="before">
+            <td class="text-center">
+                <span t-field="order_line.product_id.barcode' " />
+            </td>
+        </xpath>
+        
+        
+        
         <xpath expr="//table[1]/thead/tr//th[last()]" position="before">
             <th class="text-right">
                 <strong>Disc. (%)</strong>
