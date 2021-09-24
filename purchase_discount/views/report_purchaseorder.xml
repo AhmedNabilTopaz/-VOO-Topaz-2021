@@ -23,7 +23,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.product_uom.name']]" position="before">
             <td class="text-center">
-                <span t-field="line.barcodez" />
+                <span t-esc="', '.join(map(lambda x: x.name, product.product.barcode))"    />
             </td>
         </xpath>
       
