@@ -26,10 +26,10 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
    
     # Topaz modification 2021
-    barcode = fields.Char('Barcode' compute = "_compute_order_barcode",) 
+    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
     def _compute_order_barcode(self):
         if self.product_id:
-            self.barcode = product.product.barcode 
+            self.barcodez = product.product.barcode 
     
     # barcode = fields.Many2one('product.product', string='Barcode', )
 
