@@ -32,6 +32,11 @@ class PurchaseOrderLine(models.Model):
         if self.product_id:
             self.barcodez = product.product.barcode 
     
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+         if self.product_id:
+            self.barcodez = product.product.barcode
+        
     # barcode = fields.Many2one('product.product', string='Barcode', )
 
     # adding discount to depends
