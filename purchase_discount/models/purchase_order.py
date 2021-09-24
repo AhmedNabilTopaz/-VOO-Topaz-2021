@@ -24,18 +24,20 @@ class PurchaseOrder(models.Model):
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
-   
+   _inherit = "product.product"
+
+
     # Topaz modification 2021
     barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
     @api.depends("product_id")
     def _compute_order_barcode(self):
         if self.product_id:
-            self.barcodez = product.product.barcode 
+            self.barcodez = product.barcode 
     
     @api.onchange("product_id")
     def _onchange_product_id(self):
          if self.product_id:
-            self.barcodez = product.product.barcode
+            self.barcodez = product.barcode
         
     # barcode = fields.Many2one('product.product', string='Barcode', )
 
