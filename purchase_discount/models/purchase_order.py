@@ -25,52 +25,6 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
    
-
-    # Topaz modification 2021
-    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
-    
-    @api.depends("product_id")
-    def _compute_order_barcode(self):
-        if self.product_id:
-            self.barcodez = product.barcode 
-    
-#     @api.onchange("product_id")
-#     def _onchange_product_id(self):
-#          if self.product_id:
-#             self.barcodez = product.barcode
-        
-    # barcode = fields.Many2one('product.product', string='Barcode', )
-
-    
-      
-    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
-    
-    @api.depends('product_qty', 'price_unit', 'taxes_id')
-    def _Unit_price(self):
-        for line in self:
-            self.unit_price_vat = line.price_unit + line.taxes_id
-        
-  
-
-#     @api.depends('product_qty', 'price_unit', 'taxes_id')
-#     def _compute_amount(self):
-#         for line in self:
-#             vals = line._prepare_compute_all_values()
-#             taxes = line.taxes_id.compute_all(
-#                 vals['price_unit'],
-#                 vals['currency_id'],
-#                 vals['product_qty'],
-#                 vals['product'],
-#                 vals['partner'])
-#             line.update({
-#                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
-#                 'price_total': taxes['total_included'],
-#                 'price_subtotal': taxes['total_excluded'],
-#             })
-
-
-            
-            
     # adding discount to depends
     @api.depends("discount")
     def _compute_amount(self):
@@ -183,3 +137,49 @@ class PurchaseOrderLine(models.Model):
         if not seller:
             return {}
         return {"discount": seller.discount}
+    
+    # Topaz modification 2021
+    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
+    
+    @api.depends("product_id")
+    def _compute_order_barcode(self):
+        if self.product_id:
+            self.barcodez = product.barcode 
+    
+#     @api.onchange("product_id")
+#     def _onchange_product_id(self):
+#          if self.product_id:
+#             self.barcodez = product.barcode
+        
+    # barcode = fields.Many2one('product.product', string='Barcode', )
+
+    
+      
+    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+    
+    @api.depends('product_qty', 'price_unit', 'taxes_id')
+    def _Unit_price(self):
+        for line in self:
+            self.unit_price_vat = line.price_unit + line.taxes_id
+        
+  
+
+#     @api.depends('product_qty', 'price_unit', 'taxes_id')
+#     def _compute_amount(self):
+#         for line in self:
+#             vals = line._prepare_compute_all_values()
+#             taxes = line.taxes_id.compute_all(
+#                 vals['price_unit'],
+#                 vals['currency_id'],
+#                 vals['product_qty'],
+#                 vals['product'],
+#                 vals['partner'])
+#             line.update({
+#                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+#                 'price_total': taxes['total_included'],
+#                 'price_subtotal': taxes['total_excluded'],
+#             })
+
+
+            
+            
