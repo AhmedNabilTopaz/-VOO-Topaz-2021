@@ -160,7 +160,9 @@ class PurchaseOrderLine(models.Model):
     @api.depends('product_qty', 'price_unit', 'taxes_id')
     def _Unit_price(self):
         for line in self:
-            self.unit_price_vat = line.price_unit + line.taxes_id
+            self.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )
+            
+        return self.unit_price_vat
         
   
 
