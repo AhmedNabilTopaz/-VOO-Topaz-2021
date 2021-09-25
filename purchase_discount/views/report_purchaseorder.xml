@@ -48,10 +48,27 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.discount']]" position="after">
             <td class="text-center">
-                <span t-field="line.x_unit_price_withtax"    />
+                <span t-options="{"widget": "monetary", "display_currency": o.currency_id}"  t-field="line.x_unit_price_withtax"    />
             </td>
         </xpath>
          
+        <xpath expr="//table[1]/thead/tr//th[10]" position="replace">
+            <th class="text-center">
+                <strong>Amount without VAT </strong>
+            </th>
+        </xpath>
+        
+         <xpath expr="//table[1]/thead/tr//th[10]" position="before">
+            <th class="text-center">
+                <strong>VAT Amount </strong>
+            </th>
+        </xpath>
+       <xpath expr="//td[span[@t-field='line.price_subtotal']]" position="before">
+            <td class="text-center">
+                <span t-options="{"widget": "monetary", "display_currency": o.currency_id}"  t-field="line.price_tax"    />
+            </td>
+        </xpath>
+        
         
     </template>
 </odoo>
