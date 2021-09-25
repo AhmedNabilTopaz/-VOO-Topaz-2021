@@ -170,3 +170,4 @@ class StockMove(models.Model):
                         )
         return True
 
+ 
