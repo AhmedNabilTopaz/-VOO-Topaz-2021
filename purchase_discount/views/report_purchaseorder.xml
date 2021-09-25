@@ -41,12 +41,12 @@
             </td>
         </xpath>
       
-        <xpath expr="//table[1]/thead/tr//th[8]" position="before">
+        <xpath expr="//table[1]/thead/tr//th[8]" position="after">
             <th class="text-center">
-                <strong>Unit Price + vat </strong>
+                <strong>Unit Price with VAT after Disc </strong>
             </th>
         </xpath>
-       <xpath expr="//td[span[@t-field='line.discount']]" position="before">
+       <xpath expr="//td[span[@t-field='line.discount']]" position="after">
             <td class="text-center">
                 <span t-field="line.x_unit_price_withtax"    />
             </td>
