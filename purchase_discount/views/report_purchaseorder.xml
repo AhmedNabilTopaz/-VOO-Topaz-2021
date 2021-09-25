@@ -48,7 +48,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.discount']]" position="before">
             <td class="text-center">
-                <span t-field="line.x_unit_price_withtax"    />
+                <span t-field="line.unit_price_vat"    />
             </td>
         </xpath>
          
