@@ -51,7 +51,7 @@
                 <span t-field="line.unit_price_vat"    />
             </td>
         </xpath>
-        
+         
         
     </template>
 </odoo>
