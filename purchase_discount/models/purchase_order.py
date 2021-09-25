@@ -63,7 +63,8 @@ class PurchaseOrderLine(models.Model):
         self.ensure_one()
         if self.discount:
             return self.price_unit * (1 - self.discount / 100)
-        return self.price_unit
+        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
+        return self.price_unit , self.unit_price_vat 
 
     def _get_stock_move_price_unit(self):
         """Get correct price with discount replacing current price_unit
@@ -80,10 +81,11 @@ class PurchaseOrderLine(models.Model):
             price_unit = self.price_unit
             self.price_unit = price
         price = super()._get_stock_move_price_unit()
+        line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )
         if price_unit:
             self.price_unit = price_unit
-            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id ) 
-        return price
+            self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
+        return price , line.unit_price_vat
 
     @api.onchange("product_qty", "product_uom")
     def _onchange_quantity(self):
@@ -103,7 +105,9 @@ class PurchaseOrderLine(models.Model):
                 uom_id=self.product_uom,
             )
             self._apply_value_from_seller(seller)
-        return res
+        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
+
+        return res , self.unit_price_vat
 
     @api.model
     def _apply_value_from_seller(self, seller):
@@ -117,7 +121,9 @@ class PurchaseOrderLine(models.Model):
     def _prepare_account_move_line(self, move=False):
         vals = super(PurchaseOrderLine, self)._prepare_account_move_line(move)
         vals["discount"] = self.discount
-        return vals
+        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
+
+        return vals , self.unit_price_vat
 
     @api.model
     def _prepare_purchase_order_line(
