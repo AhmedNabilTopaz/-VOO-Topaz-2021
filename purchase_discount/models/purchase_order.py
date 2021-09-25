@@ -36,12 +36,12 @@ class PurchaseOrderLine(models.Model):
         return vals
 
     # topaz  
-    unit_price_vat = fields.Float(string="Unit Price + vat" )# , computed = "_Unit_price",) 
+    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
     
-#     @api.depends('price_unit', 'taxes_id')
-#     def _Unit_price(self):
-#         for line in self:
-#             line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
+    @api.depends('price_unit', 'taxes_id')
+    def _Unit_price(self):
+        for line in self:
+            line.unit_price_vat = line.price_unit * ( 1 + int( line.taxes_id ) )
    
     discount = fields.Float(string="Discount (%)", digits="Discount")
     
@@ -63,8 +63,7 @@ class PurchaseOrderLine(models.Model):
         self.ensure_one()
         if self.discount:
             return self.price_unit * (1 - self.discount / 100)
-        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
-        return self.price_unit , self.unit_price_vat 
+         return self.price_unit 
 
     def _get_stock_move_price_unit(self):
         """Get correct price with discount replacing current price_unit
@@ -81,11 +80,9 @@ class PurchaseOrderLine(models.Model):
             price_unit = self.price_unit
             self.price_unit = price
         price = super()._get_stock_move_price_unit()
-        line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )
-        if price_unit:
+         if price_unit:
             self.price_unit = price_unit
-            self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
-        return price , line.unit_price_vat
+         return price  
 
     @api.onchange("product_qty", "product_uom")
     def _onchange_quantity(self):
@@ -105,9 +102,8 @@ class PurchaseOrderLine(models.Model):
                 uom_id=self.product_uom,
             )
             self._apply_value_from_seller(seller)
-        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
-
-        return res , self.unit_price_vat
+ 
+        return res  
 
     @api.model
     def _apply_value_from_seller(self, seller):
@@ -121,9 +117,8 @@ class PurchaseOrderLine(models.Model):
     def _prepare_account_move_line(self, move=False):
         vals = super(PurchaseOrderLine, self)._prepare_account_move_line(move)
         vals["discount"] = self.discount
-        self.unit_price_vat = self.price_unit * ( 1 + self.taxes_id )
-
-        return vals , self.unit_price_vat
+ 
+        return vals  
 
     @api.model
     def _prepare_purchase_order_line(
