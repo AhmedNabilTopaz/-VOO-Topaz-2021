@@ -157,13 +157,11 @@ class PurchaseOrderLine(models.Model):
       
     unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
     
-    @api.depends('product_qty', 'price_unit', 'taxes_id')
+    @api.depends('price_unit', 'taxes_id')
     def _Unit_price(self):
-        for line in self.order_line:
-            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )
-            
-        return line.unit_price_vat
-        
+        for line in self:
+            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
+   
   
 
 #     @api.depends('product_qty', 'price_unit', 'taxes_id')
