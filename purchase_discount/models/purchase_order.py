@@ -24,7 +24,8 @@ class PurchaseOrder(models.Model):
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
-   
+
+
     # adding discount to depends
     @api.depends("discount")
     def _compute_amount(self):
@@ -35,17 +36,35 @@ class PurchaseOrderLine(models.Model):
         vals.update({"price_unit": self._get_discounted_price_unit()})
         return vals
 
+    discount = fields.Float(string="Discount (%)", digits="Discount")
+   
     # topaz  
     unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
     
     @api.depends('price_unit', 'taxes_id')
     def _Unit_price(self):
-        for line in self.order_line:
+        for line in self:
              if line.product_id:
-                line.unit_price_vat = line.price_unit * ( 1 + int( line.taxes_id ) )
-   
-    discount = fields.Float(string="Discount (%)", digits="Discount")
+                line.unit_price_vat = line.price_unit * ( 1 +  line.taxes_id )  
     
+    # Topaz modification 2021
+    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
+    
+    @api.depends("product_id")
+    def _compute_order_barcode(self):
+        if self.product_id:
+            self.barcodez = product.barcode            
+   
+
+    # line.price_tax
+    # line.price_subtotal
+    #    < span t - esc = "', '.join(map(lambda x: x.name, line.taxes_id))" / >
+    #    < td   class ="text-right" >
+    #    < span   t - field = "line.price_unit" / >
+    #    < td   class ="text-right" >
+    #    < span t - field = "line.price_subtotal" t - options = '{"widget": "monetary", "display_currency": o.currency_id}' / >
+
+
     _sql_constraints = [
         (
             "discount_limit",
@@ -64,7 +83,7 @@ class PurchaseOrderLine(models.Model):
         self.ensure_one()
         if self.discount:
             return self.price_unit * (1 - self.discount / 100)
-         return self.price_unit 
+        return self.price_unit
 
     def _get_stock_move_price_unit(self):
         """Get correct price with discount replacing current price_unit
@@ -81,9 +100,9 @@ class PurchaseOrderLine(models.Model):
             price_unit = self.price_unit
             self.price_unit = price
         price = super()._get_stock_move_price_unit()
-         if price_unit:
+        if price_unit:
             self.price_unit = price_unit
-         return price  
+        return price
 
     @api.onchange("product_qty", "product_uom")
     def _onchange_quantity(self):
@@ -103,8 +122,7 @@ class PurchaseOrderLine(models.Model):
                 uom_id=self.product_uom,
             )
             self._apply_value_from_seller(seller)
- 
-        return res  
+        return res
 
     @api.model
     def _apply_value_from_seller(self, seller):
@@ -117,8 +135,7 @@ class PurchaseOrderLine(models.Model):
     def _prepare_account_move_line(self, move=False):
         vals = super(PurchaseOrderLine, self)._prepare_account_move_line(move)
         vals["discount"] = self.discount
- 
-        return vals  
+        return vals
 
     @api.model
     def _prepare_purchase_order_line(
@@ -146,49 +163,4 @@ class PurchaseOrderLine(models.Model):
         if not seller:
             return {}
         return {"discount": seller.discount}
-    
-    # Topaz modification 2021
-    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
-    
-    @api.depends("product_id")
-    def _compute_order_barcode(self):
-        if self.product_id:
-            self.barcodez = product.barcode 
-    
-#     @api.onchange("product_id")
-#     def _onchange_product_id(self):
-#          if self.product_id:
-#             self.barcodez = product.barcode
-        
-#     barcode = fields.Many2one('product.product', string='Barcode', )
 
-    
-      
-#     unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
-    
-#     @api.depends('price_unit', 'taxes_id')
-#     def _Unit_price(self):
-#         for line in self:
-#             line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
-   
-  
-
-#     @api.depends('product_qty', 'price_unit', 'taxes_id')
-#     def _compute_amount(self):
-#         for line in self:
-#             vals = line._prepare_compute_all_values()
-#             taxes = line.taxes_id.compute_all(
-#                 vals['price_unit'],
-#                 vals['currency_id'],
-#                 vals['product_qty'],
-#                 vals['product'],
-#                 vals['partner'])
-#             line.update({
-#                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
-#                 'price_total': taxes['total_included'],
-#                 'price_subtotal': taxes['total_excluded'],
-#             })
-
-
-            
-            
