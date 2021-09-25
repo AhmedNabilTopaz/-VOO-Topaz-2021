@@ -40,8 +40,9 @@ class PurchaseOrderLine(models.Model):
     
     @api.depends('price_unit', 'taxes_id')
     def _Unit_price(self):
-        for line in self:
-            line.unit_price_vat = line.price_unit * ( 1 + int( line.taxes_id ) )
+        for line in self.order_line:
+             if line.product_id:
+                line.unit_price_vat = line.price_unit * ( 1 + int( line.taxes_id ) )
    
     discount = fields.Float(string="Discount (%)", digits="Discount")
     
@@ -112,7 +113,6 @@ class PurchaseOrderLine(models.Model):
         if not seller:
             return
         self.discount = seller.discount
-        self._Unit_price()
 
     def _prepare_account_move_line(self, move=False):
         vals = super(PurchaseOrderLine, self)._prepare_account_move_line(move)
@@ -160,7 +160,7 @@ class PurchaseOrderLine(models.Model):
 #          if self.product_id:
 #             self.barcodez = product.barcode
         
-    # barcode = fields.Many2one('product.product', string='Barcode', )
+#     barcode = fields.Many2one('product.product', string='Barcode', )
 
     
       
