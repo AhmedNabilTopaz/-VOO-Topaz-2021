@@ -48,7 +48,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.discount']]" position="after">
             <td class="text-center">
-                <span t-options="{"widget": "monetary", "display_currency": o.currency_id}"  t-field="line.x_unit_price_withtax"    />
+                <span    t-field="line.x_unit_price_withtax"    />
             </td>
         </xpath>
          
@@ -65,7 +65,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.price_subtotal']]" position="before">
             <td class="text-center">
-                <span t-options="{"widget": "monetary", "display_currency": o.currency_id}"  t-field="line.price_tax"    />
+                <span    t-field="line.price_tax"    />
             </td>
         </xpath>
         
