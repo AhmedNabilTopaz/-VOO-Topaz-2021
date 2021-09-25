@@ -35,8 +35,14 @@ class PurchaseOrderLine(models.Model):
         vals.update({"price_unit": self._get_discounted_price_unit()})
         return vals
 
-      
-
+    # topaz  
+    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+    
+    @api.depends('price_unit', 'taxes_id')
+    def _Unit_price(self):
+        for line in self:
+            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
+   
     discount = fields.Float(string="Discount (%)", digits="Discount")
     
     _sql_constraints = [
@@ -76,6 +82,7 @@ class PurchaseOrderLine(models.Model):
         price = super()._get_stock_move_price_unit()
         if price_unit:
             self.price_unit = price_unit
+            self._Unit_price()
         return price
 
     @api.onchange("product_qty", "product_uom")
@@ -105,6 +112,7 @@ class PurchaseOrderLine(models.Model):
         if not seller:
             return
         self.discount = seller.discount
+        self._Unit_price()
 
     def _prepare_account_move_line(self, move=False):
         vals = super(PurchaseOrderLine, self)._prepare_account_move_line(move)
@@ -155,12 +163,12 @@ class PurchaseOrderLine(models.Model):
 
     
       
-    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+#     unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
     
-    @api.depends('price_unit', 'taxes_id')
-    def _Unit_price(self):
-        for line in self:
-            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
+#     @api.depends('price_unit', 'taxes_id')
+#     def _Unit_price(self):
+#         for line in self:
+#             line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
    
   
 
