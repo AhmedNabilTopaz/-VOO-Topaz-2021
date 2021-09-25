@@ -27,6 +27,16 @@
             </td>
         </xpath>
       
+        <xpath expr="//table[1]/thead/tr//th[7]" position="before">
+            <th class="text-center">
+                <strong>Unit Price + vat </strong>
+            </th>
+        </xpath>
+       <xpath expr="//td[span[@t-field='line.product_uom.name']]" position="before">
+            <td class="text-center">
+                <span t-field="line.unit_price_vat"    />
+            </td>
+        </xpath>
         
         
         <xpath expr="//table[1]/thead/tr//th[last()]" position="before">
