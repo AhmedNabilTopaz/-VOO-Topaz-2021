@@ -78,7 +78,7 @@ class StockMove(models.Model):
                     data.check_warehouse(
                         odoo_product_id, warehouse_id, ecomm_cannels)
         return True
-
+ 
     @api.model
     def check_warehouse_location(self, location_obj, company_id):
         warehouse_model = self.env['stock.warehouse']
