@@ -38,7 +38,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.product_uom.name']]" position="before">
             <td class="text-center">
-                <span style="transform: scaleY(2.0) !important;-webkit-transform: scaleY(1.5) !important; display: inline-block;-moz-transform: scaleY(1.5) !important;font:30px/40px free3of9;padding-top:10px !important;">
+                <span style="transform: scaleY(2.0) !important;-webkit-transform: scaleY(1.5) !important; display: inline-block;-moz-transform: scaleY(1.5) !important;font:30px/40px free3of9;padding-top:10px !important;" />
                 <span t-field="line.product_id.barcode"    />
             </td>
         </xpath>
