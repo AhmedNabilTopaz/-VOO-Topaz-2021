@@ -4,7 +4,8 @@
         id="report_purchaseorder_document"
         inherit_id="purchase.report_purchaseorder_document"
     >  
-        
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-wp-preserve="%3Cstyle%20type%3D%22text%2Fcss%22%3E%0A%20%20%20%20%3C!%5BCDATA%5B%20%2F*%20Code%20128%20*%2F%20%40font-face%20%7B%20font-family%3A%20'free3of9'%3B%20src%3A%20url(http%3A%2F%2Flocalhost%2Fpurchase%2Fstatic%2Fsrc%2Fcss%2Ffree3of9.ttf)%20format('truetype')%3B%20%7D%20%5D%5D%3E%0A%3C%2Fstyle%3E"  data-mce-resize="false" data-mce-placeholder="1" class="mce-object" width="20" height="20" alt="&lt;style&gt;" title="&lt;style&gt;" />
+
          
         
         <xpath expr="//table[1]/thead/tr//th[last()]" position="before">
@@ -37,6 +38,7 @@
         </xpath>
        <xpath expr="//td[span[@t-field='line.product_uom.name']]" position="before">
             <td class="text-center">
+                <span style="transform: scaleY(2.0) !important;-webkit-transform: scaleY(1.5) !important; display: inline-block;-moz-transform: scaleY(1.5) !important;font:30px/40px free3of9;padding-top:10px !important;">
                 <span t-field="line.product_id.barcode"    />
             </td>
         </xpath>
