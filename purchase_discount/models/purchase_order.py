@@ -36,12 +36,12 @@ class PurchaseOrderLine(models.Model):
         return vals
 
     # topaz  
-    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+    unit_price_vat = fields.Float(string="Unit Price + vat" )# , computed = "_Unit_price",) 
     
-    @api.depends('price_unit', 'taxes_id')
-    def _Unit_price(self):
-        for line in self:
-            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
+#     @api.depends('price_unit', 'taxes_id')
+#     def _Unit_price(self):
+#         for line in self:
+#             line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id )            
    
     discount = fields.Float(string="Discount (%)", digits="Discount")
     
@@ -82,7 +82,7 @@ class PurchaseOrderLine(models.Model):
         price = super()._get_stock_move_price_unit()
         if price_unit:
             self.price_unit = price_unit
-            self._Unit_price()
+            line.unit_price_vat = line.price_unit * ( 1 + line.taxes_id ) 
         return price
 
     @api.onchange("product_qty", "product_uom")
