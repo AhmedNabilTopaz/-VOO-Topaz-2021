@@ -41,6 +41,36 @@ class PurchaseOrderLine(models.Model):
         
     # barcode = fields.Many2one('product.product', string='Barcode', )
 
+    
+      
+    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+    
+    @api.depends('product_qty', 'price_unit', 'taxes_id')
+    def _Unit_price(self):
+        for line in self:
+            self.unit_price_vat = line.price_unit + line.taxes_id
+        
+  
+
+#     @api.depends('product_qty', 'price_unit', 'taxes_id')
+#     def _compute_amount(self):
+#         for line in self:
+#             vals = line._prepare_compute_all_values()
+#             taxes = line.taxes_id.compute_all(
+#                 vals['price_unit'],
+#                 vals['currency_id'],
+#                 vals['product_qty'],
+#                 vals['product'],
+#                 vals['partner'])
+#             line.update({
+#                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+#                 'price_total': taxes['total_included'],
+#                 'price_subtotal': taxes['total_excluded'],
+#             })
+
+
+            
+            
     # adding discount to depends
     @api.depends("discount")
     def _compute_amount(self):
@@ -51,8 +81,10 @@ class PurchaseOrderLine(models.Model):
         vals.update({"price_unit": self._get_discounted_price_unit()})
         return vals
 
-    discount = fields.Float(string="Discount (%)", digits="Discount")
+      
 
+    discount = fields.Float(string="Discount (%)", digits="Discount")
+    
     _sql_constraints = [
         (
             "discount_limit",
