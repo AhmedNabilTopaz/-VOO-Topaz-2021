@@ -96,7 +96,9 @@
 <xpath position="attributes" expr="/t[1]/t[1]/div[1]/table[1]/tbody[1]/t[2]/tr[1]/t[1]/td[2]/span[1]">
   <attribute name="t-options-humanreadable">15</attribute>
 </xpath>
-        
+<xpath position="attributes" expr="/t[1]/t[1]/div[1]/table[1]/tbody[1]/t[2]/tr[1]/t[1]/td[2]/span[1]">
+   <attribute name="t-options-symbology">"EAN13"</attribute>
+</xpath>    
         
         
     </template>
