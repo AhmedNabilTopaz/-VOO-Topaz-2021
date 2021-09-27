@@ -76,5 +76,12 @@
 
        </xpath>
         
+         <xpath expr="//td[span[@t-field='line.name']]" position="replace">
+            <td class="text-center">
+                   <span t-field="line.product_id"/>                
+            </td>
+        </xpath>
+        
+        
     </template>
 </odoo>
