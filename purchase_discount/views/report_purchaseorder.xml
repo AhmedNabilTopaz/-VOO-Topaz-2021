@@ -90,7 +90,7 @@
    <attribute name="t-options-width">150</attribute>
 </xpath>
 <xpath position="attributes" expr="/t[1]/t[1]/div[1]/table[1]/tbody[1]/t[2]/tr[1]/t[1]/td[2]/span[1]">
-  <attribute name="t-options-height">30</attribute>
+  <attribute name="t-options-height">70</attribute>
 </xpath>
 
 <xpath position="attributes" expr="/t[1]/t[1]/div[1]/table[1]/tbody[1]/t[2]/tr[1]/t[1]/td[2]/span[1]">
