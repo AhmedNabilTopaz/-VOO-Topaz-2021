@@ -24,22 +24,7 @@ class PurchaseOrder(models.Model):
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
-   
 
-    # Topaz modification 2021
-    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
-    
-    @api.depends("product_id")
-    def _compute_order_barcode(self):
-        if self.product_id:
-            self.barcodez = product.barcode 
-    
-#     @api.onchange("product_id")
-#     def _onchange_product_id(self):
-#          if self.product_id:
-#             self.barcodez = product.barcode
-        
-    # barcode = fields.Many2one('product.product', string='Barcode', )
 
     # adding discount to depends
     @api.depends("discount")
@@ -52,6 +37,33 @@ class PurchaseOrderLine(models.Model):
         return vals
 
     discount = fields.Float(string="Discount (%)", digits="Discount")
+   
+    # topaz  
+    unit_price_vat = fields.Float(string="Unit Price + vat" , computed = "_Unit_price",) 
+    
+    @api.depends('price_unit', 'taxes_id')
+    def _Unit_price(self):
+        for line in self:
+             if line.product_id:
+                line.unit_price_vat = line.price_unit * ( 1 +  line.taxes_id )  
+    
+    # Topaz modification 2021
+    barcodez = fields.Char('Barcode' , computed = "_compute_order_barcode",) 
+    
+    @api.depends("product_id")
+    def _compute_order_barcode(self):
+        if self.product_id:
+            self.barcodez = product.barcode            
+   
+
+    # line.price_tax
+    # line.price_subtotal
+    #    < span t - esc = "', '.join(map(lambda x: x.name, line.taxes_id))" / >
+    #    < td   class ="text-right" >
+    #    < span   t - field = "line.price_unit" / >
+    #    < td   class ="text-right" >
+    #    < span t - field = "line.price_subtotal" t - options = '{"widget": "monetary", "display_currency": o.currency_id}' / >
+
 
     _sql_constraints = [
         (
@@ -151,3 +163,4 @@ class PurchaseOrderLine(models.Model):
         if not seller:
             return {}
         return {"discount": seller.discount}
+
