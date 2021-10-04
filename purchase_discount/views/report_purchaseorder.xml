@@ -100,6 +100,8 @@
    <attribute name="t-options-symbology">"EAN13"</attribute>
 </xpath>    
         
+          <xpath expr="/t[1]/t[1]/t[4]/t[1]/div[1]/div[1]" position="replace"/>
+
         
     </template>
 </odoo>
