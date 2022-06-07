@@ -19,3 +19,24 @@ class StockQuant(models.Model):
 #         self.env.cr.execute(query, params)
 #         quant_ids = self.env['stock.quant'].browse([quant['id'] for quant in self.env.cr.dictfetchall()])
 #         #quant_ids.sudo().unlink()
+
+
+    @api.model
+    def _quant_tasks(self):
+        self._merge_quants()
+         
+    
+class QuantPackage(models.Model):
+    _inherit = "stock.quant.package"
+
+    def unpack(self):
+        for package in self:
+            move_line_to_modify = self.env['stock.move.line'].search([
+                ('package_id', '=', package.id),
+                ('state', 'in', ('assigned', 'partially_available')),
+                ('product_qty', '!=', 0),
+            ])
+            move_line_to_modify.write({'package_id': False})
+            package.mapped('quant_ids').sudo().write({'package_id': False})
+            self.env['stock.quant']._merge_quants()
+ 
