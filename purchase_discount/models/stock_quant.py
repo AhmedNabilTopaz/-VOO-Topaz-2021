@@ -1,6 +1,6 @@
 from odoo import models
 
-class StockQuants(models.Model):
+class StockQuant(models.Model):
     _inherit = "stock.quant"
     
     @api.model
