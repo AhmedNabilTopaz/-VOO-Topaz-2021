@@ -153,7 +153,12 @@ class StockMove(models.Model):
                         url = '/V1/inventory/bulk-partial-source-transfer'
                 else:
                     location = locationDestId if destSourceCode else locationId
-                    proQty = self.env['product.product'].get_theoretical_quantity(odooProductId, location)
+                    ctx['location'] = location
+                    proObj = self.env['product.product'].with_context(ctx).browse(odooProductId)
+                    if instanceObj.connector_stock_action == 'qoh':
+                        proQty = proObj.qty_available - proObj.outgoing_qty
+                    else:
+                        proQty = proObj.virtual_available
                     data = {'sourceItems':[
                                 {'sku': sku, 'source_code': destSourceCode or originSourceCode, 'quantity': proQty, 'status': 1}
                                 ]}
