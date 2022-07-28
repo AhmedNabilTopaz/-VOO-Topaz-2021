@@ -162,7 +162,7 @@ class StockMove(models.Model):
                     data = {'sourceItems':[
                                 {'sku': sku, 'source_code': destSourceCode or originSourceCode, 'quantity': proQty, 'status': 1}
                                 ]}
-                    url = '/V1/inventory/source-items'
+                    url = '/V1/odoomagentoconnect/inventory/source-items'
 
                 connection = self.env['connector.instance'].with_context(ctx)._create_connection()
                 if url:
